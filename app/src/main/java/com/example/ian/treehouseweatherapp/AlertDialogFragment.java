@@ -15,5 +15,10 @@ public class AlertDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Context context = getActivity();
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(context.getString(R.string.error_title))
+                .setMessage(context.getString(R.string.error_message))
+                .setPositiveButton(context.getString(R.string.error_ok_button_text), null);
+        AlertDialog dialog = builder.create();
+        return dialog;
     }
 }

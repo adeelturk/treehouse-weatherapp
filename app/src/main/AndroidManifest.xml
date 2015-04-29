@@ -3,7 +3,7 @@
     package="com.example.ian.treehouseweatherapp" >
 
     <uses-permission android:name="android.permission.INTERNET"/>
-
+    <uses-permission android:name="ANDROID.PERMISSION.ACCESS_NETWORK_STATE"/>
 
     <application
         android:allowBackup="true"
