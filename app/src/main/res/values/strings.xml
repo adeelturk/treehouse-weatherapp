@@ -6,4 +6,11 @@
     <string name="error_title">Oops! Sorry!</string>
     <string name="error_message">There was an error. Please try again.</string>
     <string name="error_ok_button_text">Ok</string>
+    <string name="alert_title_http">Data retrieval error</string>
+    <string name="alert_message_http">An error occurred retrieving weather data. Please try again.</string>
+    <string name="alert_button_http">OK</string>
+    <string name="alert_title_network">Network error</string>
+    <string name="alert_message_network">"Your network is disconnected, or unavailable. Ensure you are connected "</string>
+    <string name="alert_title_message2">to the network, and please try again.</string>
+    <string name="alert_button_network">OK</string>
 </resources>

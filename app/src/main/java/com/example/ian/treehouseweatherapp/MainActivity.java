@@ -6,11 +6,9 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
@@ -21,9 +19,7 @@ import java.io.IOException;
 public class MainActivity extends ActionBarActivity {
 
     public static final String TAG = MainActivity.class.getSimpleName();
-    public static final MediaType mediaType = MediaType.parse("text/x-markdown; charset=utf-8");
-
-
+    //public static final MediaType mediaType = MediaType.parse("text/x-markdown; charset=utf-8");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,8 +32,6 @@ public class MainActivity extends ActionBarActivity {
                 "/" + latitude + "," + longitude;
 
         if (isNetworkAvailable()) {
-
-
             //begin using OkHttp library recipe for Synchronous Get
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
@@ -64,15 +58,21 @@ public class MainActivity extends ActionBarActivity {
                         Log.e(TAG, "Exception caught: ", e);
                     }
                 }
-
             });
-            else {
-                Toast.makeText(this, "Network is unavailable!",
-                        Toast.LENGTH_LONG).show();
+        }
+            else { // attempting to make existing Toast message into an Alert Dialog Message
+               /* Toast.makeText(this, "Network is unavailable!",
+                        Toast.LENGTH_LONG).show(); */
+            // This works, but is very messy and completely blurs the lines between the AlertDialogFragment class and this activity.
+
+               /* AlertDialogFragment dialog = new AlertDialogFragment();
+                dialog.builder.setTitle("There was a network error!")
+                              .setMessage("Network was not found!")
+                              .setPositiveButton("Dismiss", null); */
             }
 
         Log.d(TAG, "Main UI code is running");
-    } }
+    }
 
     private boolean isNetworkAvailable() {
         ConnectivityManager manager = (ConnectivityManager)
@@ -90,16 +90,6 @@ public class MainActivity extends ActionBarActivity {
         dialog.show(getFragmentManager(), "error_dialog");
     }
 }
-
-
-
-
-
-
-
-
-
-
 
 
 
