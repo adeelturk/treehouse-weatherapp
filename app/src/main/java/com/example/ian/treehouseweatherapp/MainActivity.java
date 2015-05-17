@@ -26,7 +26,7 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         String apiKey = "3b2a6c9aed11e80da43168ee303b588c";
-        double latitude = 454534523; //37.8267;
+        double latitude = 37.8267; //  45434;
         double longitude = -122.423;
         String forecastURL = "https://api.forecast.io/forecast/" + apiKey +
                 "/" + latitude + "," + longitude;
