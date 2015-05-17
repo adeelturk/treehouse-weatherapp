@@ -26,7 +26,7 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         String apiKey = "3b2a6c9aed11e80da43168ee303b588c";
-        double latitude = 37.8267;
+        double latitude = 454534523; //37.8267;
         double longitude = -122.423;
         String forecastURL = "https://api.forecast.io/forecast/" + apiKey +
                 "/" + latitude + "," + longitude;
@@ -52,6 +52,7 @@ public class MainActivity extends ActionBarActivity {
                         if (response.isSuccessful()) {
 
                         } else { // This is an HTTP error, bad data was sent or received.
+                                // sending error code 1
                             alertUserAboutError(1);
                         }
                     } catch (IOException e) {
@@ -64,6 +65,7 @@ public class MainActivity extends ActionBarActivity {
                  //Toast.makeText(this, "Network is unavailable!",
                    //     Toast.LENGTH_LONG).show();
             // This works, but is very messy and completely blurs the lines between the AlertDialogFragment class and this activity.
+            // sending error code 2
             alertUserAboutError(2);
             }
 
@@ -83,16 +85,45 @@ public class MainActivity extends ActionBarActivity {
 
     private void alertUserAboutError(int errorCode) {
         if (errorCode == 1) {
-            AlertDialogFragment dialog = new AlertDialogFragment();
-            dialog.show(getFragmentManager(), "error_dialog");
+            // HTTP error
+            dialogFragmentCall(errorCode);
+
+
+           // showAlertDialog(this, context.getString(R.string.alert_message_http), getString(R.string.alert_title_http), getString(R.string.alert_button_http));
+           // AlertDialogFragment dialog = AlertDialogFragment.newInstance(1);
         } else if (errorCode == 2) {
-            AlertDialogFragment dialog = new AlertDialogFragment();
-            dialog.builder.setTitle("There was a network error!")
-                    .setMessage("Network was not found!")
-                    .setPositiveButton("Dismiss", null);
-            dialog.show(getFragmentManager(), "error_dialog");
+            
+            dialogFragmentCall(errorCode);
+
         }
     }
+    private void dialogFragmentCall (int errorCode) {
+        // pass the error code to the dialog fragment using Bundle intents
+        Bundle bundle = new Bundle();
+        bundle.putInt("errorCode", errorCode);
+        AlertDialogFragment dialog = new AlertDialogFragment();
+        dialog.setArguments(bundle);
+        dialog.show(getFragmentManager(), "error_dialog");
+
+    }
+    /** VERY MESSY IMPLEMENTATION OF DIALOG FRAGMENT
+     * Creates an alert dialog
+     * @param iContext current context`
+     *
+    public static AlertDialog.Builder showAlertDialog(Context iContext,String errorMessage, String errorTitle, String errorButton) {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(iContext).setTitle(errorTitle);
+        alertDialog.setMessage(errorMessage);
+        alertDialog.setPositiveButton(errorButton, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+
+            }
+        });
+        final AlertDialog dialog = alertDialog.create();
+        dialog.show(); // Show the alert dialog.
+        return alertDialog;
+    }*/
 }
 
 
