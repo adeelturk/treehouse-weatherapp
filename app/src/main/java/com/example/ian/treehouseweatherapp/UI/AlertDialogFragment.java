@@ -1,10 +1,12 @@
-package com.example.ian.treehouseweatherapp;
+package com.example.ian.treehouseweatherapp.UI;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.os.Bundle;
+
+import com.example.ian.treehouseweatherapp.R;
 
 /**
  * Created by ian on 4/29/2015.

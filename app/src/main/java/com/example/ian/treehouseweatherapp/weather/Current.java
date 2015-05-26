@@ -1,4 +1,6 @@
-package com.example.ian.treehouseweatherapp;
+package com.example.ian.treehouseweatherapp.weather;
+
+import com.example.ian.treehouseweatherapp.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -7,7 +9,7 @@ import java.util.TimeZone;
 /**
  * Created by ian on 5/17/2015.
  */
-public class CurrentWeather {
+public class Current {
     private String mIcon;
     private long mTime;
     private double mTemperature;
