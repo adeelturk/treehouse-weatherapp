@@ -85,16 +85,17 @@ public class CurrentWeather {
         return timeString;
     }
 
-    public double getTemperature() {
-        return mTemperature;
+    public int getTemperature() {
+        return  (int)Math.round(mTemperature);
     }
 
     public void setTemperature(double temperature) {
         mTemperature = temperature;
     }
 
-    public double getHumidity() {
-        return mHumidity;
+    public int getHumidity() {
+        double precipPercentage = mPrecipChance * 100;
+        return (int) Math.round(precipPercentage);
     }
 
     public void setHumidity(double humidity) {

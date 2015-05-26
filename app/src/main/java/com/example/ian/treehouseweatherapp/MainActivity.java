@@ -1,11 +1,16 @@
 package com.example.ian.treehouseweatherapp;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.Callback;
@@ -18,25 +23,65 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 
 public class MainActivity extends ActionBarActivity {
 
     public static final String TAG = MainActivity.class.getSimpleName();
-    //public static final MediaType mediaType = MediaType.parse("text/x-markdown; charset=utf-8");
 
     private CurrentWeather mCurrentWeather;
+
+    @InjectView(R.id.timeLabel) TextView mTimeLabel;
+    @InjectView(R.id.temperatureLabel) TextView mTemperatureLabel;
+    @InjectView(R.id.humidityValue) TextView mHumidityValue;
+    @InjectView(R.id.precipValue) TextView mPrecipValue;
+    @InjectView(R.id.summaryLabel) TextView mSummaryLabel;
+    @InjectView(R.id.iconImageView) ImageView mIconImageView;
+    @InjectView(R.id.humidityLabel) TextView mHumidityLabel;
+    @InjectView(R.id.precipLabel) TextView mPrecipLabel;
+    @InjectView(R.id.refreshImageView) ImageView mRefreshImageView;
+    @InjectView(R.id.progressBar) ProgressBar mProgressBar;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.inject(this);
 
+        mProgressBar.setVisibility(View.INVISIBLE);
+
+        final double latitude = 37.8267; //  45434;
+        final double longitude = -122.423;
+
+        mRefreshImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getForecast(latitude, longitude);
+            }
+        });
+
+        getForecast(latitude, longitude);
+
+        Log.d(TAG, "Main UI code is running");
+    }
+
+    private void getForecast(double latitude, double longitude) {
         String apiKey = "3b2a6c9aed11e80da43168ee303b588c";
-        double latitude = 37.8267; //  45434;
-        double longitude = -122.423;
         String forecastURL = "https://api.forecast.io/forecast/" + apiKey +
                 "/" + latitude + "," + longitude;
 
         if (isNetworkAvailable()) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    toggleRefresh();
+                }
+            });
+
             //begin using OkHttp library recipe for Synchronous Get
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
@@ -47,40 +92,73 @@ public class MainActivity extends ActionBarActivity {
             call.enqueue(new Callback() {
                 @Override
                 public void onFailure(Request request, IOException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            toggleRefresh();
+                        }
+                    });
 
                 }
 
                 @Override
                 public void onResponse(Response response) throws IOException {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            toggleRefresh();
+                        }
+                    });
                     try {
                         String jsonData = response.body().string();
-                        Log.v(TAG, jsonData );
+                        Log.v(TAG, jsonData);
                         if (response.isSuccessful()) {
                             mCurrentWeather = getCurrentDetails(jsonData);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    updateDisplay();
+                                }
+                            });
 
                         } else { // This is an HTTP error, bad data was sent or received.
-                                // sending error code 1
+                            // sending error code 1
                             alertUserAboutError(1);
                         }
-                    }
-                    catch (IOException e) {
+                    } catch (IOException e) {
                         Log.e(TAG, "Exception caught: ", e);
-                    }
-                    catch (JSONException e) {
+                    } catch (JSONException e) {
                         Log.e(TAG, "Exception caught: ", e);
                     }
                 }
             });
         }
-            else { // attempting to make existing Toast message into an Alert Dialog Message
-                 //Toast.makeText(this, "Network is unavailable!",
-                   //     Toast.LENGTH_LONG).show();
-            // This works, but is very messy and completely blurs the lines between the AlertDialogFragment class and this activity.
-            // sending error code 2
+            else {
             alertUserAboutError(2);
             }
+    }
 
-        Log.d(TAG, "Main UI code is running");
+    private void toggleRefresh() {
+        if (mProgressBar.getVisibility() == View.INVISIBLE) {
+            mProgressBar.setVisibility(View.VISIBLE);
+            mRefreshImageView.setVisibility(View.INVISIBLE);
+        }
+        else {
+            mProgressBar.setVisibility(View.INVISIBLE);
+            mRefreshImageView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void updateDisplay() {
+        mTemperatureLabel.setText(mCurrentWeather.getTemperature() + "");
+        mTimeLabel.setText("At " + mCurrentWeather.getFormattedTime() + " it will be");
+        mHumidityValue.setText(mCurrentWeather.getHumidity() + "");
+        mPrecipValue.setText(mCurrentWeather.getPrecipChance() + "%");
+        mSummaryLabel.setText(mCurrentWeather.getSummary());
+
+        // This allows us to access the current weather clipart/icon.
+        Drawable drawable = getResources().getDrawable(mCurrentWeather.getIconId());
+        mIconImageView.setImageDrawable(drawable);
     }
 
     private CurrentWeather getCurrentDetails(String jsonData) throws JSONException {
@@ -124,7 +202,7 @@ public class MainActivity extends ActionBarActivity {
            // showAlertDialog(this, context.getString(R.string.alert_message_http), getString(R.string.alert_title_http), getString(R.string.alert_button_http));
            // AlertDialogFragment dialog = AlertDialogFragment.newInstance(1);
         } else if (errorCode == 2) {
-            
+            // Missing Network Error
             dialogFragmentCall(errorCode);
 
         }
