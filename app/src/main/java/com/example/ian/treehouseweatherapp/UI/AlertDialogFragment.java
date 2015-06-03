@@ -91,3 +91,21 @@ public static AlertDialog.Builder showAlertDialog(Context iContext,String errorM
     dialog.show(); // Show the alert dialog.
     return alertDialog;
 }*/
+/** VERY MESSY IMPLEMENTATION OF DIALOG FRAGMENT
+ * Creates an alert dialog
+ * @param iContext current context`
+ *
+public static AlertDialog.Builder showAlertDialog(Context iContext,String errorMessage, String errorTitle, String errorButton) {
+AlertDialog.Builder alertDialog = new AlertDialog.Builder(iContext).setTitle(errorTitle);
+alertDialog.setMessage(errorMessage);
+alertDialog.setPositiveButton(errorButton, new DialogInterface.OnClickListener() {
+@Override
+public void onClick(DialogInterface dialog, int which) {
+dialog.dismiss();
+
+}
+});
+final AlertDialog dialog = alertDialog.create();
+dialog.show(); // Show the alert dialog.
+return alertDialog;
+}*/

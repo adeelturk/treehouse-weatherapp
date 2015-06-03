@@ -13,4 +13,6 @@
     <string name="alert_message_network">"Your network is disconnected, or unavailable. Ensure you are connected "</string>
     <string name="alert_title_message2">to the network, and please try again.</string>
     <string name="alert_button_network">OK</string>
+    <string name="title_activity_daily_forecast">DailyForecastActivity</string>
+    <string name="no_daily_forecast_data">There is no data to display</string>
 </resources>

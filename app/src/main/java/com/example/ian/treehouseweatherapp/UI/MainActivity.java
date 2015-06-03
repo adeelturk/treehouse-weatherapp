@@ -1,6 +1,7 @@
 package com.example.ian.treehouseweatherapp.UI;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -31,6 +32,7 @@ import java.io.IOException;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -63,11 +65,11 @@ public class MainActivity extends ActionBarActivity {
         final double latitude = 37.8267; //  45434;
         final double longitude = -122.423;
 
-        mRefreshImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getForecast(latitude, longitude);
-            }
+            mRefreshImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getForecast(latitude, longitude);
+                }
         });
 
         getForecast(latitude, longitude);
@@ -151,6 +153,7 @@ public class MainActivity extends ActionBarActivity {
         else {
             mProgressBar.setVisibility(View.INVISIBLE);
             mRefreshImageView.setVisibility(View.VISIBLE);
+            
         }
     }
 
@@ -282,24 +285,13 @@ public class MainActivity extends ActionBarActivity {
         dialog.show(getFragmentManager(), "error_dialog");
 
     }
-    /** VERY MESSY IMPLEMENTATION OF DIALOG FRAGMENT
-     * Creates an alert dialog
-     * @param iContext current context`
-     *
-    public static AlertDialog.Builder showAlertDialog(Context iContext,String errorMessage, String errorTitle, String errorButton) {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(iContext).setTitle(errorTitle);
-        alertDialog.setMessage(errorMessage);
-        alertDialog.setPositiveButton(errorButton, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
 
-            }
-        });
-        final AlertDialog dialog = alertDialog.create();
-        dialog.show(); // Show the alert dialog.
-        return alertDialog;
-    }*/
+    @OnClick (R.id.dailyButton)
+    public void startDailyActivity(View view){
+        Intent intent = new Intent(this, DailyForecastActivity.class);
+        startActivity(intent);
+    }
+
 }
 
 
