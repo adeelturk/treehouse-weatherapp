@@ -39,6 +39,7 @@ public class DayAdapter extends BaseAdapter {
         return 0; // not going to use this
     }
 
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
@@ -50,6 +51,8 @@ public class DayAdapter extends BaseAdapter {
             holder.iconImageView = (ImageView) convertView.findViewById(R.id.iconImageView);
             holder.temperatureLabel = (TextView) convertView.findViewById(R.id.temperatureLabel);
             holder.dayLabel = (TextView) convertView.findViewById(R.id.dayNameLabel);
+
+            convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
 
@@ -59,8 +62,11 @@ public class DayAdapter extends BaseAdapter {
 
         holder.iconImageView.setImageResource(day.getIconId());
         holder.temperatureLabel.setText(day.getTemperatureMax()+ "");
-        holder.dayLabel.setText(day.getDayOfTheWeek());
-
+        if (position == 0) {
+            holder.dayLabel.setText("Today");
+        } else {
+            holder.dayLabel.setText(day.getDayOfTheWeek());
+        }
         return convertView;
     }
 
@@ -68,7 +74,7 @@ public class DayAdapter extends BaseAdapter {
         ImageView iconImageView; // public by default
         TextView temperatureLabel;
         TextView dayLabel;
-
     }
+
 
 }
